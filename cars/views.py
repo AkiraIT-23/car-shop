@@ -21,7 +21,7 @@ class CategoryDetailAPIView(RetrieveUpdateDestroyAPIView):
 class CarAPIView(ListCreateAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, ]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
 
 class CarDetailAPIView(RetrieveUpdateDestroyAPIView):
