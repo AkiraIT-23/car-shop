@@ -1,15 +1,6 @@
 from rest_framework.serializers import ModelSerializer
-from django.contrib.auth import get_user_model
 
 from .models import Category, Car, CarImage
-
-User = get_user_model()
-
-
-class UserSerializer(ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'email', ]
 
 
 class CategorySerializer(ModelSerializer):
@@ -25,19 +16,17 @@ class CarImageSerializer(ModelSerializer):
 
 
 class CarSerializer(ModelSerializer):
-    author = UserSerializer(read_only=True)
     images = CarImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Car
         fields = [
-            'id', 'title', 'birthdate', 'price', 'model', 'category', 'author', 'images',
+            'id', 'title', 'birthdate', 'price', 'model', 'category', 'images',
         ]
 
     def create(self, validated_data):
         request = self.context.get("request")
         files = request.FILES.getlist("images")
-        validated_data["author"] = request.user
         car = Car.objects.create(**validated_data)
         for image in files:
             CarImage.objects.create(
@@ -61,4 +50,3 @@ class CarSerializer(ModelSerializer):
                     image=image
                 )
         return instance
-
