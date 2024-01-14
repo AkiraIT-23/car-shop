@@ -3,7 +3,6 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from rest_framework.pagination import PageNumberPagination
 
 from .models import Category, Car
-from .permissions import IsAuthorOrReadOnly
 from .serializers import CategorySerializer, CarSerializer
 
 
@@ -29,7 +28,7 @@ class CategoryCreateAPIView(CreateAPIView):
 class CategoryDetailAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAdminUser]
 
 
 class CarAPIListPagination(PageNumberPagination):
@@ -41,7 +40,6 @@ class CarAPIListPagination(PageNumberPagination):
 class CarListAPIView(ListAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
-    permission_classes = [IsAuthorOrReadOnly]
     pagination_class = CarAPIListPagination
 
 
