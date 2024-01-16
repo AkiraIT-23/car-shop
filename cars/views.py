@@ -1,22 +1,17 @@
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
-from rest_framework.pagination import PageNumberPagination
+# from rest_framework import filters
 
 from .models import Category, Car
 from .serializers import CategorySerializer, CarSerializer
-
-
-class CategoryAPIListPagination(PageNumberPagination):
-    page_size = 2
-    page_size_query_param = 'page_size'
-    max_page_size = 10000
+from generics.pagination import CustomAPIListPagination
 
 
 class CategoryListAPIView(ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    pagination_class = CategoryAPIListPagination
+    pagination_class = CustomAPIListPagination
 
 
 class CategoryCreateAPIView(CreateAPIView):
@@ -31,16 +26,12 @@ class CategoryDetailAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
 
 
-class CarAPIListPagination(PageNumberPagination):
-    page_size = 2
-    page_size_query_param = 'page_size'
-    max_page_size = 10000
-
-
 class CarListAPIView(ListAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
-    pagination_class = CarAPIListPagination
+    pagination_class = CustomAPIListPagination
+    # filter_backends = [filters.SearchFilter]
+    # search_fields = ['category']
 
 
 class CarCreateAPIView(CreateAPIView):

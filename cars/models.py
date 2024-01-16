@@ -13,6 +13,7 @@ class Car(models.Model):
     birthdate = models.IntegerField()
     price = models.IntegerField()
     model = models.TextField()
+    quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
