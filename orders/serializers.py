@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from .models import Order
+from .models import Order, Car
 
 
 User = get_user_model()
@@ -18,13 +18,13 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'quantity', 'car', 'user']
+        fields = ['id', 'quantity', 'car', 'user', 'sold']
 
 
 class HistoryOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
-        fields = ['id', 'quantity', 'car']
+        fields = ['id', 'quantity', 'car', 'sold']
 
 
 class CreatingOrderSerializer(serializers.ModelSerializer):
@@ -35,3 +35,18 @@ class CreatingOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'quantity', 'car', 'user']
+
+
+class BuySerializer(serializers.Serializer):
+    quantity = serializers.IntegerField()
+    car_id = serializers.IntegerField()
+    user_id = serializers.IntegerField()
+    sold = serializers.BooleanField(default=None)
+
+    def update(self, instance, validated_data):
+        car = Car.objects.get(id=instance.id)
+        car.quantity -= instance.quantity
+        car.save()
+        instance.sold = True
+        instance.save()
+        return instance

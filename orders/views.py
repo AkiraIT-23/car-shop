@@ -1,8 +1,8 @@
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView
 
 from .models import Order
-from .serializers import OrderSerializer, CreatingOrderSerializer, HistoryOrderSerializer
+from .serializers import OrderSerializer, CreatingOrderSerializer, HistoryOrderSerializer, BuySerializer
 from .permissions import IsOrderAuthorOrAdmin
 from generics.pagination import CustomAPIListPagination
 
@@ -11,9 +11,6 @@ class OrderCreateAPIView(CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = CreatingOrderSerializer
     permission_classes = [IsAuthenticated]
-
-    # def perform_create(self, serializer):
-    #     serializer.save(user=self.request.user)
 
 
 class MyOrderListAPIView(ListAPIView):
@@ -42,3 +39,8 @@ class OrderHistoryAPIView(ListAPIView):
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
+
+
+class BuyAPIView(UpdateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = BuySerializer

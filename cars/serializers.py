@@ -21,7 +21,7 @@ class CarSerializer(ModelSerializer):
     class Meta:
         model = Car
         fields = [
-            'id', 'title', 'birthdate', 'price', 'model', 'category', 'images',
+            'id', 'title', 'birthdate', 'price', 'model', 'quantity', 'category', 'images',
         ]
 
     def create(self, validated_data):
